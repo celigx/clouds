@@ -8,6 +8,7 @@ import WeatherContext from './context/WeatherContext';
 import CurrentForecast from './components/CurrentForecast';
 import DailyForecast from './components/DailyForecast';
 import HourlyForecast from './components/HourlyForecast';
+import Details from './components/Details';
 
 export default function App() {
   const [weather, setWeather] = useState({
@@ -56,6 +57,7 @@ export default function App() {
         <CurrentForecast />
         <DailyForecast />
         <HourlyForecast />
+        <Details />
         <StatusBar style="auto" />
       </ScrollView>
     </WeatherContext.Provider>
