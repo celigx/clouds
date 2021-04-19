@@ -6,6 +6,7 @@ import { WEATHER_API_KEY } from '@env';
 import WeatherContext from './context/WeatherContext';
 
 import CurrentForecast from './components/CurrentForecast';
+import DailyForecast from './components/DailyForecast';
 
 export default function App() {
   const [weather, setWeather] = useState({
@@ -52,6 +53,7 @@ export default function App() {
     <WeatherContext.Provider value={{ weather, setWeather, fetchWeather }}>
       <ScrollView style={styles.container}>
         <CurrentForecast />
+        <DailyForecast />
         <StatusBar style="auto" />
       </ScrollView>
     </WeatherContext.Provider>
