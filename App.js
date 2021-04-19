@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { WEATHER_API_KEY } from '@env';
 
 import WeatherContext from './context/WeatherContext';
+
+import CurrentForecast from './components/CurrentForecast';
 
 export default function App() {
   const [weather, setWeather] = useState({
@@ -33,6 +35,7 @@ export default function App() {
         setWeather((prevState) => ({
           ...prevState,
           temp: data.current.temp,
+          feelsLike: data.current.feels_like,
           conditions: data.current.weather[0].main,
           wind: data.current.wind_speed,
           humidity: data.current.humidity,
@@ -47,7 +50,10 @@ export default function App() {
 
   return (
     <WeatherContext.Provider value={{ weather, setWeather, fetchWeather }}>
-      <StatusBar style="auto" />
+      <ScrollView style={styles.container}>
+        <CurrentForecast />
+        <StatusBar style="auto" />
+      </ScrollView>
     </WeatherContext.Provider>
   );
 }
@@ -55,8 +61,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#A5D8FF',
   },
 });
