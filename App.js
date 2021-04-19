@@ -9,6 +9,8 @@ import CurrentForecast from './components/CurrentForecast';
 import DailyForecast from './components/DailyForecast';
 import HourlyForecast from './components/HourlyForecast';
 import Details from './components/Details';
+import TopBar from './components/TopBar';
+import AlgoliaSearch from './components/AlgoliaSearch';
 
 export default function App() {
   const [weather, setWeather] = useState({
@@ -25,6 +27,7 @@ export default function App() {
     daily:'',
     hourly:'',
     isLoading: true,
+    search: false,
   })
 
   const [details, setDetails] = useState({
@@ -69,17 +72,27 @@ export default function App() {
       })
   }
 
-  return (
-    <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
-      <ScrollView style={styles.container}>
-        <CurrentForecast />
-        <DailyForecast />
-        <HourlyForecast />
-        <Details />
+  if (!weather.search) {
+    return (
+      <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
+        <ScrollView style={styles.container}>
+          <TopBar />
+          <CurrentForecast />
+          <DailyForecast />
+          <HourlyForecast />
+          <Details />
+          <StatusBar style="auto" />
+        </ScrollView>
+      </WeatherContext.Provider>
+    );
+  } else {
+    return (
+      <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
+        <AlgoliaSearch />
         <StatusBar style="auto" />
-      </ScrollView>
-    </WeatherContext.Provider>
-  );
+      </WeatherContext.Provider>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
