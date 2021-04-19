@@ -27,6 +27,16 @@ export default function App() {
     isLoading: true,
   })
 
+  const [details, setDetails] = useState({
+    wind: '',
+    humidity: '',
+    uv: '',
+    pressure: '',
+    dewPoint: '',
+    cloudCover: '',
+    pop: ''
+  })
+
   useEffect(() => {
     fetchWeather()
   }, [weather.city, weather.lat, weather.log])
@@ -42,17 +52,25 @@ export default function App() {
           conditions: data.current.weather[0].main,
           wind: data.current.wind_speed,
           humidity: data.current.humidity,
-          sunrise: data.current.sunrise,
-          sunset: data.current.sunset,
           daily: data.daily,
           hourly: data.hourly,
           isLoading:false
-        }))    
+        }))
+        setDetails((prevState) => ({
+          ...prevState,
+          wind: data.daily[0].wind_speed,
+          humidity: data.daily[0].humidity,
+          uv: data.daily[0].uvi,
+          pressure: data.daily[0].pressure,
+          dew: data.daily[0].dew_point,
+          cloud: data.daily[0].clouds,
+          pop: data.daily[0].pop
+        }))
       })
   }
 
   return (
-    <WeatherContext.Provider value={{ weather, setWeather, fetchWeather }}>
+    <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
       <ScrollView style={styles.container}>
         <CurrentForecast />
         <DailyForecast />
