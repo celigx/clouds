@@ -57,7 +57,7 @@ export default function App() {
           humidity: data.current.humidity,
           daily: data.daily,
           hourly: data.hourly,
-          isLoading:false
+          isLoading: false
         }))
         setDetails((prevState) => ({
           ...prevState,
@@ -72,7 +72,7 @@ export default function App() {
       })
   }
 
-  if (!weather.search) {
+  if (!weather.search && !weather.isLoading) {
     return (
       <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
         <ScrollView style={styles.container}>
