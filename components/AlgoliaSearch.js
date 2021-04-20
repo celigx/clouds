@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextInput, TouchableOpacity, ScrollView, View, Text, StatusBar } from "react-native";
+import { TextInput, TouchableOpacity, ScrollView, View, Text, StatusBar, BackHandler } from "react-native";
 import PropTypes from "prop-types";
 import {ALGOLIA_APPID, ALGOLIA_APPKEY} from '@env';
 import algoliasearch from "algoliasearch/reactnative";
@@ -17,8 +17,19 @@ export default function AlgoliaSearch(props) {
   const places = algoliasearch.initPlaces({ALGOLIA_APPID}, {ALGOLIA_APPKEY});
 
   useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress)
     getData();
+    
+    return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
   }, [weather.city, weather.lat, weather.log, weather.search])
+
+  const handleBackPress = () => {
+    setWeather((prevState) => ({
+      ...prevState,
+      search: false
+    }))
+    return true
+  }
 
   const handleSearchComplete = (props) => {
     setWeather((prevState) => ({
