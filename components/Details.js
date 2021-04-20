@@ -45,7 +45,7 @@ export default function Details() {
         <MaterialCommunityIcons name="speedometer" size={28} color="#555" />
         <View style={styles.textContainer}>
           <Text style={styles.conditionText}>UV index</Text>
-          <Text style={styles.conditionValue}>{details.uv} { UVindex(Math.round(details.uvi)) }</Text>
+          <Text style={styles.conditionValue}>{Math.round(details.uv)} { UVindex(Math.round(details.uv)) }</Text>
         </View>
       </View>
 
