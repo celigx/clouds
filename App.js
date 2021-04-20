@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { WEATHER_API_KEY } from '@env';
 
 import WeatherContext from './context/WeatherContext';
@@ -40,6 +40,8 @@ export default function App() {
     pop: ''
   })
 
+  const [refreshing, setRefreshing] = useState(false)
+
   useEffect(() => {
     fetchWeather()
   }, [weather.city, weather.lat, weather.log])
@@ -72,10 +74,26 @@ export default function App() {
       })
   }
 
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const pullToRefresh = () => {
+    setRefreshing(true)
+    fetchWeather()
+    wait(2000).then(() => setRefreshing(false))
+  }
+
   if (!weather.search && !weather.isLoading) {
     return (
       <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
-        <ScrollView style={styles.container}>
+        <ScrollView 
+          style={styles.container} 
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={pullToRefresh} />
+          }
+        >
           <TopBar />
           <CurrentForecast />
           <DailyForecast />
