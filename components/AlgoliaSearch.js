@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TextInput, TouchableOpacity, ScrollView, View, Text, StatusBar } from "react-native";
 import PropTypes from "prop-types";
 import {ALGOLIA_APPID, ALGOLIA_APPKEY} from '@env';
-
 import algoliasearch from "algoliasearch/reactnative";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import WeatherContext from '../context/WeatherContext';
 
@@ -16,23 +16,59 @@ export default function AlgoliaSearch(props) {
   // algoliasearch.initPlace("appID", "appKey")
   const places = algoliasearch.initPlaces({ALGOLIA_APPID}, {ALGOLIA_APPKEY});
 
+  useEffect(() => {
+    getData();
+  }, [weather.city, weather.lat, weather.log, weather.search])
+
   const handleSearchComplete = (props) => {
     setWeather((prevState) => ({
       ...prevState,
       city: props.item.locale_names[0],
       lat: props.item._geoloc.lat,
-      log: props.item._geoloc.lng
+      log: props.item._geoloc.lng,
+      search: false,
     }))
+
+    storeData({
+      city: props.item.locale_names[0], 
+      lat: props.item._geoloc.lat, 
+      log: props.item._geoloc.lng
+    })
 
     fetchWeather();
-    
-    setWeather((prevState) => ({
-      ...prevState,
-      search: false
-    }))
   }
 
-  
+  // // Storing object value in AsyncStorage
+  const storeData = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('city', jsonValue)
+    console.log('async:', value)
+    } catch (e) {
+    console.log('storeData:', e)
+   }
+  }
+
+  // // Reading object value from AsyncStorage
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('city')
+      const objValue = JSON.parse(jsonValue)
+    
+      if(jsonValue !== null) {
+        setWeather((prevState) => ({
+          ...prevState,
+          city: objValue.city,
+          lat: objValue.lat,
+          log: objValue.log,
+        }))
+      }
+      console.log('getData:', jsonValue);
+    } catch(e) {
+      console.log('getData:', e)
+    }
+  }
+
   const searchResults = (text) => {
     // Create an options object
     const finalOptions = {
