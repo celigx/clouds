@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { WEATHER_API_KEY } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import WeatherContext from './context/WeatherContext';
 
@@ -14,7 +15,7 @@ import AlgoliaSearch from './components/AlgoliaSearch';
 
 export default function App() {
   const [weather, setWeather] = useState({
-    city:'Zagreb',
+    city: '',
     unit:'metric',
     temp:'',
     conditions:'',
@@ -22,8 +23,8 @@ export default function App() {
     humidity:'',
     sunrise:'',
     sunset:'',
-    lat:'45.8153',
-    log:'15.9665',
+    lat: '',
+    log: '',
     daily:'',
     hourly:'',
     isLoading: true,
@@ -43,10 +44,15 @@ export default function App() {
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
-    fetchWeather()
+    // Get data from AsyncStorage
+    if (weather.lat === '' && weather.log === '') {
+      getData()
+    } else {
+      fetchWeather()
+    }
   }, [weather.city, weather.lat, weather.log])
 
-  const fetchWeather = () => {
+  const fetchWeather = () => { 
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${weather.lat}&lon=${weather.log}&appid=${WEATHER_API_KEY}&units=${weather.unit}`)
       .then(response => response.json())
       .then(data => {
@@ -74,7 +80,6 @@ export default function App() {
       })
   }
 
-
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   }
@@ -85,7 +90,31 @@ export default function App() {
     wait(2000).then(() => setRefreshing(false))
   }
 
-  if (!weather.search && !weather.isLoading) {
+  // Reading object value from AsyncStorage
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('city')
+      const objValue = JSON.parse(jsonValue)
+    
+      if(jsonValue !== null) {
+        setWeather((prevState) => ({
+          ...prevState,
+          city: objValue.city,
+          lat: objValue.lat,
+          log: objValue.log,
+        }))
+      }
+      console.log('getData:', jsonValue);
+    } catch(e) {
+      console.log('getData:', e)
+    }
+  }
+
+  if (weather.isLoading) {
+    return null
+  }
+
+  if (!weather.search) {
     return (
       <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
         <ScrollView 
