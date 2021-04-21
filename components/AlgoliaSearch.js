@@ -18,10 +18,8 @@ export default function AlgoliaSearch(props) {
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress)
-    getData();
-    
     return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
-  }, [weather.city, weather.lat, weather.log, weather.search])
+  }, [weather.lat, weather.log])
 
   const handleBackPress = () => {
     setWeather((prevState) => ({
@@ -45,11 +43,9 @@ export default function AlgoliaSearch(props) {
       lat: props.item._geoloc.lat, 
       log: props.item._geoloc.lng
     })
-
-    fetchWeather();
   }
 
-  // // Storing object value in AsyncStorage
+  // Storing object value in AsyncStorage
   const storeData = async (value) => {
   try {
     const jsonValue = JSON.stringify(value);
@@ -58,26 +54,6 @@ export default function AlgoliaSearch(props) {
     } catch (e) {
     console.log('storeData:', e)
    }
-  }
-
-  // // Reading object value from AsyncStorage
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('city')
-      const objValue = JSON.parse(jsonValue)
-    
-      if(jsonValue !== null) {
-        setWeather((prevState) => ({
-          ...prevState,
-          city: objValue.city,
-          lat: objValue.lat,
-          log: objValue.log,
-        }))
-      }
-      console.log('getData:', jsonValue);
-    } catch(e) {
-      console.log('getData:', e)
-    }
   }
 
   const searchResults = (text) => {
