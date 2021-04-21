@@ -35,7 +35,7 @@ export default function AlgoliaSearch(props) {
       city: props.item.locale_names[0],
       lat: props.item._geoloc.lat,
       log: props.item._geoloc.lng,
-      search: false,
+      // search: false,
     }))
 
     storeData({
@@ -43,6 +43,21 @@ export default function AlgoliaSearch(props) {
       lat: props.item._geoloc.lat, 
       log: props.item._geoloc.lng
     })
+
+    // if (props.item._geoloc.lat === weather.lat && props.item._geoloc.lng === weather.lat) {
+      if (props.item.locale_names[0] === weather.city) {
+      setWeather((prevState) => ({
+        ...prevState,
+        search: false,
+      }))
+    } else {
+      setTimeout(() => {
+        setWeather((prevState) => ({
+          ...prevState,
+          search: false,
+        }))
+      }, 1500);
+    }
   }
 
   // Storing object value in AsyncStorage
