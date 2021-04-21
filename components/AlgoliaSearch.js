@@ -104,7 +104,7 @@ export default function AlgoliaSearch(props) {
     <KeyboardAvoidingView behavior='height' style={styles.container}>
       <TextInput
         style={styles.textInput}
-        placeholder="Search..."
+        placeholder="Search for a location..."
         placeholderTextColor={"#777"}
         onChangeText={searchResults}
         returnKeyType="search"
