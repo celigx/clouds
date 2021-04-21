@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TextInput, TouchableOpacity, ScrollView, View, Text, StatusBar, BackHandler } from "react-native";
+import { TextInput, TouchableOpacity, ScrollView, View, Text, StatusBar, BackHandler, KeyboardAvoidingView } from "react-native";
 import PropTypes from "prop-types";
 import {ALGOLIA_APPID, ALGOLIA_APPKEY} from '@env';
 import algoliasearch from "algoliasearch/reactnative";
@@ -101,7 +101,7 @@ export default function AlgoliaSearch(props) {
   }
   
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior='height' style={styles.container}>
       <TextInput
         style={styles.textInput}
         placeholder="Search..."
@@ -120,7 +120,7 @@ export default function AlgoliaSearch(props) {
           </TouchableOpacity>)
         )}
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
