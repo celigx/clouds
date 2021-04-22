@@ -103,6 +103,13 @@ export default function App() {
           lat: objValue.lat,
           log: objValue.log,
         }))
+      } else {
+        setWeather((prevState) => ({
+          ...prevState,
+          city: 'Zagreb',
+          lat: '45.8153',
+          log: '15.9665',
+        }))
       }
       console.log('getData:', jsonValue);
     } catch(e) {
