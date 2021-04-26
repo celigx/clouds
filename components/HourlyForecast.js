@@ -14,10 +14,7 @@ export default function HourlyForecast() {
       return null
     } else {
       return (
-        <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
-          <Feather style={styles.iconDroplet} name={'droplet'} size={14} color={'#1D9AFF'} />
-          <Text style={styles.rain}>{Math.round(value)}%</Text>
-        </View>
+        <Text style={styles.rain}>{Math.round(value)}%</Text>
       )
     }
   }
@@ -25,12 +22,13 @@ export default function HourlyForecast() {
   const renderHourlyWeather = ({ item }) => {
     return (
       <View style={styles.containerHour}>
-        <Text style={styles.time}>{dayjs(item.dt * 1000).format('HH:00')}</Text>
-        <Text style={styles.date}>{dayjs(item.dt * 1000).format('ddd')}</Text>
-        <Feather style={styles.icon} name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} style={styles.icon} />
+        <View style={{ alignItems:'center' }}>
+          <Text style={styles.time}>{dayjs(item.dt * 1000).format('HH:00')}</Text>
+          <Text style={styles.date}>{dayjs(item.dt * 1000).format('ddd')}</Text>
+          <Feather style={styles.icon} name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} style={styles.icon} />
+          {rainPercentage(Math.round(item.pop))}
+        </View>
         <Text style={styles.temp}>{Math.round(item.temp)}°</Text>
-        
-        {rainPercentage(Math.round(item.pop))}
       </View>
     )
   }
@@ -65,6 +63,7 @@ const styles = StyleSheet.create({
   },
   containerHour: {
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20
   },
   time: {
@@ -75,11 +74,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   temp: {
-    paddingVertical: 16,
+    paddingTop: 16
   },
   rain: {
-    color: '#1D9AFF'
-  },
-  iconDroplet: {
+    color: '#1D9AFF',
+    paddingTop: 16
   }
 });
