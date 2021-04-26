@@ -11,21 +11,37 @@ import { tempGradient } from '../helpers'
 export default function DailyForecast() {
   const { weather, setWeather } = useContext(WeatherContext);
 
+  const rainPercentage = (value) => {
+    if (value === undefined) {
+      return null
+    } else {
+      return (
+        <Text style={styles.rain}>{Math.round(value)}%</Text>
+      )
+    }
+  }
+
   const renderDailyWeather = ({ item }) => {
     return (
       <View style={styles.containerWeek}>
-        <Text style={styles.day}>{dayjs(item.dt * 1000).format('ddd')}</Text>
-        <Text style={styles.date}>{dayjs(item.dt * 1000).format('DD/MM')}</Text>
-        <Feather name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} />
-        <View style={styles.containerTemp}>
-          <Text style={styles.tempMax}>{Math.round(item.temp.max)}°</Text>
-          <LinearGradient
-            colors={[tempGradient(Math.round(item.temp.max)), tempGradient(Math.round(item.temp.min))]}
-            start={{ x:0, y:0.4 }}
-            style={styles.gradient}
-          />
-          <Text style={styles.tempMin}>{Math.round(item.temp.min)}°</Text>
+
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.day}>{dayjs(item.dt * 1000).format('ddd')}</Text>
+          <Text style={styles.date}>{dayjs(item.dt * 1000).format('DD/MM')}</Text>
+          <Feather name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} />
+          {rainPercentage(item.rain)}
         </View>
+
+          <View style={styles.containerTemp}>
+            <Text style={styles.tempMax}>{Math.round(item.temp.max)}°</Text>
+            <LinearGradient
+              colors={[tempGradient(Math.round(item.temp.max)), tempGradient(Math.round(item.temp.min))]}
+              start={{ x:0, y:0.4 }}
+              style={styles.gradient}
+              />
+            <Text style={styles.tempMin}>{Math.round(item.temp.min)}°</Text>
+          </View>
+
       </View>
     )
   }
@@ -63,7 +79,7 @@ const styles = StyleSheet.create({
   },
   containerWeek: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20
   },
   day: {
@@ -72,6 +88,10 @@ const styles = StyleSheet.create({
   date: {
     color: '#999',
     paddingBottom: 16
+  },
+  rain: {
+    color: '#1D9AFF',
+    paddingTop: 16
   },
   icon: {
   },
