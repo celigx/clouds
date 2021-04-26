@@ -7,7 +7,20 @@ import WeatherContext from '../context/WeatherContext';
 import { weatherConditions } from './WeatherConditions';
 
 export default function HourlyForecast() {
-  const { weather, setWeather, fetchWeather } = useContext(WeatherContext);
+  const { weather, setWeather } = useContext(WeatherContext);
+
+  const rainPercentage = (value) => {
+    if (value === 0) {
+      return null
+    } else {
+      return (
+        <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
+          <Feather style={styles.iconDroplet} name={'droplet'} size={14} color={'#1D9AFF'} />
+          <Text style={styles.rain}>{Math.round(value)}%</Text>
+        </View>
+      )
+    }
+  }
 
   const renderHourlyWeather = ({ item }) => {
     return (
@@ -16,8 +29,8 @@ export default function HourlyForecast() {
         <Text style={styles.date}>{dayjs(item.dt * 1000).format('ddd')}</Text>
         <Feather style={styles.icon} name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} style={styles.icon} />
         <Text style={styles.temp}>{Math.round(item.temp)}°</Text>
-        {/* Convert meters per second to kilometers per hour - 5m/s = (5 * 3.6) = 18km/h */}
-        <Text style={styles.wind}>{Math.round(item.wind_speed * 3.60)} kph</Text>
+        
+        {rainPercentage(Math.round(item.pop))}
       </View>
     )
   }
@@ -52,7 +65,6 @@ const styles = StyleSheet.create({
   },
   containerHour: {
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 20
   },
   time: {
@@ -63,6 +75,11 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   temp: {
-    paddingVertical: 16
+    paddingVertical: 16,
   },
+  rain: {
+    color: '#1D9AFF'
+  },
+  iconDroplet: {
+  }
 });
