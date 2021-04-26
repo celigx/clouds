@@ -11,7 +11,7 @@ export default function AlgoliaSearch(props) {
   const [textSearch, setTextSearch] = useState('')
   const [search, setSearch] = useState(null)
         
-  const { weather, setWeather, fetchWeather } = useContext(WeatherContext);
+  const { weather, setWeather } = useContext(WeatherContext);
 
   // algoliasearch.initPlace("appID", "appKey")
   const places = algoliasearch.initPlaces({ALGOLIA_APPID}, {ALGOLIA_APPKEY});

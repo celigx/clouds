@@ -141,7 +141,7 @@ export default function App() {
     );
   } else {
     return (
-      <WeatherContext.Provider value={{ weather, setWeather, details, fetchWeather }}>
+      <WeatherContext.Provider value={{ weather, setWeather, details }}>
         <AlgoliaSearch />
         <StatusBar style="auto" />
       </WeatherContext.Provider>
