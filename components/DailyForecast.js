@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import dayjs from "dayjs";
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import WeatherContext from '../context/WeatherContext';
 import { weatherConditions } from '../components/WeatherConditions';
+import { tempGradient } from '../helpers'
 
 export default function DailyForecast() {
   const { weather, setWeather } = useContext(WeatherContext);
@@ -17,6 +19,11 @@ export default function DailyForecast() {
         <Feather name={weatherConditions[item.weather[0].main].icon} size={24} color={weatherConditions[item.weather[0].main].color} />
         <View style={styles.containerTemp}>
           <Text style={styles.tempMax}>{Math.round(item.temp.max)}°</Text>
+          <LinearGradient
+            colors={[tempGradient(Math.round(item.temp.max)), tempGradient(Math.round(item.temp.min))]}
+            start={{ x:0, y:0.4 }}
+            style={styles.gradient}
+          />
           <Text style={styles.tempMin}>{Math.round(item.temp.min)}°</Text>
         </View>
       </View>
@@ -74,5 +81,13 @@ const styles = StyleSheet.create({
   },
   tempMax: {
     paddingBottom: 8
+  },
+  gradient: {
+    height: 50, 
+    width: 10, 
+    borderRadius: 6
+  },
+  tempMin: {
+    paddingTop: 8
   }
 });
