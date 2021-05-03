@@ -12,6 +12,7 @@ import HourlyForecast from './components/HourlyForecast';
 import Details from './components/Details';
 import TopBar from './components/TopBar';
 import AlgoliaSearch from './components/AlgoliaSearch';
+import SunMoon from './components/SunMoon';
 
 export default function App() {
   const [weather, setWeather] = useState({
@@ -111,7 +112,7 @@ export default function App() {
           log: '15.9665',
         }))
       }
-      console.log('getData:', jsonValue);
+      // console.log('getData:', jsonValue);
     } catch(e) {
       console.log('getData:', e)
     }
@@ -134,6 +135,7 @@ export default function App() {
           <CurrentForecast />
           <DailyForecast />
           <HourlyForecast />
+          <SunMoon />
           <Details />
           <StatusBar style="auto" />
         </ScrollView>
