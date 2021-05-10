@@ -1,7 +1,7 @@
 export const weatherConditions = {
   Clear: {
     icon: 'sun',
-    color: '#EB8D25'
+    color: '#FFD651'
     },
     Clouds: {
       icon: 'cloud',
